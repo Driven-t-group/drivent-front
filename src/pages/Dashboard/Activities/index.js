@@ -77,7 +77,7 @@ function LocationContainer(props) {
       <a Style='font-size: 20px; color: #8E8E8E; font-weight: 400;'>{props.title}</a>
       <div Style='display:flex; justify-content: center;'>
         <div Style='margin-top: 13px; border: 1px solid #D7D7D7; width: 18rem; min-height: 392px;'>
-          <ActivityCard title='soavekkk' init='2023-05-12T01:00:21.697Z' end='2023-05-12T01:00:21.697Z' vacancies='69'/>
+          <ActivityCard title='soavekkk' init='2023-05-12T01:00:21.697Z' end='2023-05-12T02:30:21.697Z' vacancies='69'/>
         </div>
       </div>
     </div>
@@ -85,11 +85,19 @@ function LocationContainer(props) {
 }
 
 function ActivityCard(props) {
-  const time = '11:00 - 12:00';
-  const height = '100px';
+  const initTime = props.init.substring(11, 16);
+  const endTime = props.end.substring(11, 16);
+
+  const time = initTime+' - '+endTime;
+
+  const initDate = new Date(props.init);
+  const endDate = new Date(props.end);
+
+  const duration = Math.abs(initDate - endDate) / 36e5;
+  const height = 80 * duration;
 
   return(
-    <div Style={`background: #F1F1F1; border-radius:5px; display:flex; justify-content: space-between; height: ${height};`}>
+    <div Style={`background: #F1F1F1; border-radius:5px; display:flex; justify-content: space-between; height: ${height}px;`}>
       <div>
         <div>{props.title}</div>
         <div>{time}</div>
