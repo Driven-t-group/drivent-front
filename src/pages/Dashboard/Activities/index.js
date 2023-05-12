@@ -12,7 +12,6 @@ import { set } from 'date-fns';
 
 export default function Activities() {
   const [loading, setLoading] = useState(true);
-  const [stage, setStage] = useState(0);
   const [dateError, setDateError] = useState(0); // 0 = no error, 402 = no payment, 403 = remote ticket
   const [dates, setDates] = useState([]);
   const [chosenDate, setChosenDate] = useState(''); // 'yyyy-mm-dd'
@@ -34,13 +33,13 @@ export default function Activities() {
     (loading) ? 'Carregando...' :
       <div Style='height: 100%;'>
         <a Style='font-size: 34px;'>Escolha de atividades</a>
-        {(stage===0) ? <ChooseDate error={dateError} dates={dates} setStage={setStage}/> : <ChooseActivity />}
+        <ChooseDate error={dateError} dates={dates} chosenDate={chosenDate} setChosenDate={setChosenDate}/>
+        {(chosenDate === '') ? <div></div> : <ChooseActivity />}
       </div>
   );
 };
 
 function ChooseDate(props) {
-  console.log(props.error);
   return(
     props.error !== 0 ?
       <div Style='width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; color: #8E8E8E; text-align: center;'>
@@ -50,11 +49,11 @@ function ChooseDate(props) {
       </div> :
       
       <div Style='margin-top: 36px'>
-        <a Style='font-size: 20px; color: #8E8E8E;'>Primeiro, filtre pelo dia do evento</a>
+        {props.chosenDate? <div></div> : <a Style='font-size: 20px; color: #8E8E8E;'>Primeiro, filtre pelo dia do evento</a>}
 
         <div Style='display: flex; margin-top: 23px;'>
           {props.dates.map((date, i) => (
-            <DateButton onClick={props.setStage(1)} key={i}> {date} </DateButton>
+            <DateButton selected={props.chosenDate===date} onClick={props.setChosenDate(date)} key={i}> {date} </DateButton>
           ))}
         </div>
       </div>
@@ -63,5 +62,44 @@ function ChooseDate(props) {
 }
 
 function ChooseActivity(props) {
-  return 'stage1';
+  return (
+    <div Style='margin-top: 25px; display: flex; justify-content: space-around; padding: 35px;'>
+      <LocationContainer title='Auditório Principal'/>
+      <LocationContainer title='Auditório Lateral'/>
+      <LocationContainer title='Sala de Workshop'/>
+    </div>
+  );
+}
+
+function LocationContainer(props) {
+  return(
+    <div Style='text-align: center;'>
+      <a Style='font-size: 20px; color: #8E8E8E; font-weight: 400;'>{props.title}</a>
+      <div Style='display:flex; justify-content: center;'>
+        <div Style='margin-top: 13px; border: 1px solid #D7D7D7; width: 18rem; min-height: 392px;'>
+          <ActivityCard title='soavekkk' init='2023-05-12T01:00:21.697Z' end='2023-05-12T01:00:21.697Z' vacancies='69'/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityCard(props) {
+  const time = '11:00 - 12:00';
+  const height = '100px';
+
+  return(
+    <div Style={`background: #F1F1F1; border-radius:5px; display:flex; justify-content: space-between; height: ${height};`}>
+      <div>
+        <div>{props.title}</div>
+        <div>{time}</div>
+      </div>
+      <div Style='width: 66px; display: flex;'>
+        <div Style='height: 100%; width: 1px; display: flex;'>
+          <div Style='width: 1px; background: #CFCFCF; heigth: 80%;'/>
+        </div>
+        <div>{props.vacancies}</div>
+      </div>
+    </div>
+  );
 }

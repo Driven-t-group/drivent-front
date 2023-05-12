@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default styled.div`
-  background: #E0E0E0;
+  background: ${props => props.selected? '#FFD37D' : '#E0E0E0'};
   box-shadow: 0px 2px 10px 0px #00000040;
   border-radius: 4px;
   padding-top: 10px;
@@ -11,4 +11,11 @@ export default styled.div`
   display: 'inline-block';
   text-align: center;
   margin-right: 17px;
+
+  transition: .2s;
+		&:hover{
+			transform: scale(1.05);
+			transition: .2s;
+			cursor: pointer;
+		}
 `;
