@@ -21,7 +21,7 @@ export async function getByDate(token, date) {
 }
 
 export async function subscribe(token, activityId) {
-  const response = await api.post('/activity/subscribe/' + activityId, {
+  const response = await api.post('/activity/subscribe/' + activityId, {}, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

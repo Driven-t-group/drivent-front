@@ -102,6 +102,7 @@ function LocationContainer(props) {
                 end={activity.endsAt}
                 id={activity.id}
                 vacancies={activity.capacity - activity._count.Subscription}
+                subscribed={activity.subscribed}
               /> : <div></div>
           ))}
         </div>
@@ -111,6 +112,20 @@ function LocationContainer(props) {
 }
 
 function ActivityCard(props) {
+  const token = useToken();
+  console.log(token);
+  function subscribe(activityId) {
+    activityApi.subscribe(token, activityId)
+      .then((response) => {
+        toast.success('Inscrição realizada com sucesso!');
+        window.location.reload();
+      })
+      .catch((error) => {
+        toast.error('Erro ao realizar inscrição!');
+        console.log(error.response);
+      });
+  }
+
   const initTime = props.init.substring(11, 16);
   const endTime = props.end.substring(11, 16);
 
@@ -123,22 +138,27 @@ function ActivityCard(props) {
   const height = 80 * duration;
 
   return(
-    <div Style={`background: #F1F1F1; border-radius:5px; display:flex; justify-content: space-between; height: ${height}px; margin-bottom: 14px; padding: 12px;`}>
+    <div Style={`background: ${props.subscribed?'#D0FFDB':'#F1F1F1'}; border-radius:5px; display:flex; justify-content: space-between; height: ${height}px; margin-bottom: 14px; padding: 12px;`}>
       <div Style='font-size: 12px; text-align: left; color: #343434;'>
         <div Style='font-weight: 700;'>{props.title}</div>
         <div Style='margin-top: 6px;'>{time}</div>
       </div>
       <div Style='width: 66px; display: flex;'>
         <div Style='height: 100%; width: 2px; background: #CFCFCF;'/>
-        {props.vacancies === 0 ?
+        {props.subscribed?
           <div Style='width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 12px;'>
-            <img src={close_icon} alt='enter' Style='cursor: pointer; height: 22px;'/>
-            <div Style='color: red; font-size: 9px;'>Esgotado</div>
+            <img src={check_icon} alt='enter' Style='cursor: pointer; height: 22px;'/>
+            <div Style='color: green; font-size: 9px;'>Inscrito</div>
           </div> :
-          <div Style='width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 12px;'>
-            <img src={enter_icon} alt='enter' Style='cursor: pointer; height: 22px;'/>
-            <div Style='color: green; font-size: 9px;'>{props.vacancies} vagas</div>
-          </div>
+          props.vacancies === 0 ?
+            <div Style='width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 12px;'>
+              <img src={close_icon} alt='enter' Style='cursor: pointer; height: 22px;'/>
+              <div Style='color: red; font-size: 9px;'>Esgotado</div>
+            </div> :
+            <div Style='width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 12px;'>
+              <img src={enter_icon} alt='enter' Style='cursor: pointer; height: 22px;' onClick={() => subscribe(props.id)}/>
+              <div Style='color: green; font-size: 9px;'>{props.vacancies} vagas</div>
+            </div>
         }
       </div>
     </div>
