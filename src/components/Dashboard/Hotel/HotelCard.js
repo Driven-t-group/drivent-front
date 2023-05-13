@@ -3,7 +3,7 @@ import useHotelsWithRoom from '../../../hooks/api/useHotelsRoom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-export default function HotelCard({ hotelImage, name, hotelId }) {
+export default function HotelCard({ hotelImage, name, hotelId, selectedHotel, setSelectedHotel }) {
   const { getHotelsRooms } = useHotelsWithRoom();
   const [types, setTypes] = useState(null);
   const [available, setAvailable] = useState(0);
@@ -42,7 +42,7 @@ export default function HotelCard({ hotelImage, name, hotelId }) {
   }, []);
 
   return (
-    <Card>
+    <Card onClick={() => setSelectedHotel(hotelId)} selected={selectedHotel === hotelId}>
       <img src={hotelImage} alt='imagem do hotel' />
       <h2>{name}</h2>
       <ContainerDescriotion>
@@ -56,11 +56,13 @@ export default function HotelCard({ hotelImage, name, hotelId }) {
     </Card>
   );
 }
-
+/**
+ * 
+ */
 const Card = styled.div`
   width: 196px;
   padding: 14px;
-  background-color: #EBEBEB;
+  background-color: ${props => props.selected ? '#FFEED2': '#EBEBEB'};
   border-radius: 10px;
   cursor: pointer;
   img {

@@ -4,10 +4,12 @@ import HotelCard from '../../../components/Dashboard/Hotel/HotelCard';
 import NoIncludesHotel from '../../../components/Dashboard/Hotel/NoIncludesHotel';
 import NoPaymentHotel from '../../../components/Dashboard/Hotel/NoPaymentHotel';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 export default function Hotel() {
   const { ticketLoadding, ticket } = useTicket();
   const { hotels, loaddingHotels } = useHotels();
+  const [selectedHotel, setSelectedHotel] = useState(null);
 
   return (
     <Container>
@@ -19,7 +21,14 @@ export default function Hotel() {
               <Choices>
                 <p>Primeiro, escolha seu hotel</p>
                 <HotelContainer>
-                  {hotels.data.map((h) => <HotelCard hotelImage={h.image} name={h.name} hotelId={h.id} key={h.id} />)}
+                  {hotels.data.map((h) => <HotelCard hotelImage={h.image}
+                    name={h.name}
+                    hotelId={h.id}
+                    key={h.id}
+                    selectedHotel={selectedHotel}
+                    setSelectedHotel={setSelectedHotel}
+                  />
+                  )}
                 </HotelContainer>
               </Choices>
             )
