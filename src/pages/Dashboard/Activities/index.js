@@ -29,7 +29,7 @@ export default function Activities() {
     (datesLoading) ? 'Carregando...' :
       <div Style='height: 100%;'>
         <a Style='font-size: 34px;'>Escolha de atividades</a>
-        <ChooseDate error={dateError} dates={dates.data} chosenDate={chosenDate} setChosenDate={(e) => getActivity(e)}/>
+        <ChooseDate error={dateError} dates={dates.data} chosenDate={chosenDate} getActivity={getActivity} setChosenDate={setChosenDate}/>
         {(chosenDate === '') ? <div></div> :
           <div Style='margin-top: 25px; display: flex; justify-content: space-around; padding: 35px;'>
             <LocationContainer key={0} title='Auditório Principal' location='Principal' activities={activity}/>
