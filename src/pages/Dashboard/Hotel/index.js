@@ -3,6 +3,7 @@ import useHotels from '../../../hooks/api/useHotels';
 import HotelCard from '../../../components/Dashboard/Hotel/HotelCard';
 import NoIncludesHotel from '../../../components/Dashboard/Hotel/NoIncludesHotel';
 import NoPaymentHotel from '../../../components/Dashboard/Hotel/NoPaymentHotel';
+import RoomsContainer from '../../../components/Dashboard/Hotel/Rooms/RoomContainer';
 import styled from 'styled-components';
 import { useState } from 'react';
 
@@ -10,6 +11,7 @@ export default function Hotel() {
   const { ticketLoadding, ticket } = useTicket();
   const { hotels, loaddingHotels } = useHotels();
   const [selectedHotel, setSelectedHotel] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
   return (
     <Container>
@@ -27,9 +29,11 @@ export default function Hotel() {
                     key={h.id}
                     selectedHotel={selectedHotel}
                     setSelectedHotel={setSelectedHotel}
+                    setSelectedRoom={setSelectedRoom}
                   />
                   )}
                 </HotelContainer>
+                <RoomsContainer selectedHotel={selectedHotel} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>
               </Choices>
             )
           )

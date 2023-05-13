@@ -3,7 +3,7 @@ import useHotelsWithRoom from '../../../hooks/api/useHotelsRoom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-export default function HotelCard({ hotelImage, name, hotelId, selectedHotel, setSelectedHotel }) {
+export default function HotelCard({ hotelImage, name, hotelId, selectedHotel, setSelectedHotel, setSelectedRoom }) {
   const { getHotelsRooms } = useHotelsWithRoom();
   const [types, setTypes] = useState(null);
   const [available, setAvailable] = useState(0);
@@ -14,7 +14,8 @@ export default function HotelCard({ hotelImage, name, hotelId, selectedHotel, se
       const newTtypes = [];
       let newAvailable = 0;
       roomsData.data.Rooms.forEach(item => {
-        newAvailable+=item.capacity;
+        newAvailable += item.capacity;
+        newAvailable -= item.Booking.length;
         switch (item.capacity) {
         case 1:
           if (!newTtypes.includes('Single')) {
@@ -42,7 +43,10 @@ export default function HotelCard({ hotelImage, name, hotelId, selectedHotel, se
   }, []);
 
   return (
-    <Card onClick={() => setSelectedHotel(hotelId)} selected={selectedHotel === hotelId}>
+    <Card onClick={() => {
+      setSelectedHotel(hotelId);
+      setSelectedRoom(null);
+    }} selected={selectedHotel === hotelId}>
       <img src={hotelImage} alt='imagem do hotel' />
       <h2>{name}</h2>
       <ContainerDescriotion>
@@ -62,7 +66,7 @@ export default function HotelCard({ hotelImage, name, hotelId, selectedHotel, se
 const Card = styled.div`
   width: 196px;
   padding: 14px;
-  background-color: ${props => props.selected ? '#FFEED2': '#EBEBEB'};
+  background-color: ${props => props.selected ? '#FFEED2' : '#EBEBEB'};
   border-radius: 10px;
   cursor: pointer;
   img {
