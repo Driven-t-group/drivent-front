@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 import RoomCard from './RoomCard';
 import useHotelsWithRoom from '../../../../hooks/api/useHotelsRoom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useBooking from '../../../../hooks/api/useBooking';
 
-export default function RoomsContainer({ selectedHotel, selectedRoom, setSelectedRoom }) {
+export default function RoomsContainer({ selectedHotel, selectedRoom, setSelectedRoom,  booking }) {
   const { getHotelsRooms } = useHotelsWithRoom();
   const { createBooking } = useBooking();
   const [rooms, setRooms] = useState(null);
@@ -25,7 +26,11 @@ export default function RoomsContainer({ selectedHotel, selectedRoom, setSelecte
   };
 
   async function submitBooking() {
-    await createBooking({ roomId: selectedRoom });
+    try {
+      await createBooking({ roomId: selectedRoom }); 
+    } catch (error) {
+      toast('Não é possível reservar este quarto.');
+    }
   };
 
   return (
@@ -38,12 +43,13 @@ export default function RoomsContainer({ selectedHotel, selectedRoom, setSelecte
           name={item.name}
           capacity={item.capacity}
           bookings={item.Booking}
+          booking={booking}
           selectedRoom={selectedRoom}
           setSelectedRoom={setSelectedRoom}
         />
         )}
       </Rooms>
-      {selectedRoom && <button onClick={submitBooking}>RESERVAR QUARTO</button>}
+      {selectedRoom && <button onClick={submitBooking}> RESERVAR QUARTO</button>}
     </RoomContainer>
   );
 }

@@ -4,37 +4,61 @@ import HotelCard from '../../../components/Dashboard/Hotel/HotelCard';
 import NoIncludesHotel from '../../../components/Dashboard/Hotel/NoIncludesHotel';
 import NoPaymentHotel from '../../../components/Dashboard/Hotel/NoPaymentHotel';
 import RoomsContainer from '../../../components/Dashboard/Hotel/Rooms/RoomContainer';
+import useGetBooking from '../../../hooks/api/useGetBooking';
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import BookingUpdate from '../../../components/Dashboard/Hotel/BookingUpdate';
 
 export default function Hotel() {
   const { ticketLoadding, ticket } = useTicket();
   const { hotels, loaddingHotels } = useHotels();
+  const { getBooking } = useGetBooking();
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [selectedRoom, setSelectedRoom] = useState(null);
+  const [booking, setBooking] = useState();
+  const [loadingBooking, setLoadingBookings] = useState(true);
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    async function openBooking() {
+      try {
+        const bookingData = await getBooking();
+        setLoadingBookings(false);
+        setBooking(bookingData.data);
+      } catch (error) {
+        setLoadingBookings(false);
+      }
+    }
+    openBooking();
+  }, [reload]);
 
   return (
     <Container>
       <h1>Escolha de hotel e quarto</h1>
       {
-        ticketLoadding | loaddingHotels ? <div>loadding...</div> : (
+        ticketLoadding | loaddingHotels | loadingBooking ? <div>loadding...</div> : (
           ticket.data.status === 'RESERVED' ? <NoPaymentHotel /> : (
             !ticket.data.TicketType.includesHotel ? <NoIncludesHotel /> : (
-              <Choices>
-                <p>Primeiro, escolha seu hotel</p>
-                <HotelContainer>
-                  {hotels.data.map((h) => <HotelCard hotelImage={h.image}
-                    name={h.name}
-                    hotelId={h.id}
-                    key={h.id}
-                    selectedHotel={selectedHotel}
-                    setSelectedHotel={setSelectedHotel}
-                    setSelectedRoom={setSelectedRoom}
-                  />
-                  )}
-                </HotelContainer>
-                <RoomsContainer selectedHotel={selectedHotel} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>
-              </Choices>
+              booking ? <BookingUpdate booking={booking} reload={reload} setReload={setReload}/> : (
+                <Choices>
+                  <p>Primeiro, escolha seu hotel</p>
+                  <HotelContainer>
+                    {
+                      hotels.data.map((h) => <HotelCard
+                        hotelImage={h.image}
+                        name={h.name}
+                        hotelId={h.id}
+                        key={h.id}
+                        selectedHotel={selectedHotel}
+                        setSelectedHotel={setSelectedHotel}
+                        setSelectedRoom={setSelectedRoom}
+                      />
+                      )}
+                  </HotelContainer>
+                  <RoomsContainer selectedHotel={selectedHotel} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} booking={booking}/>
+                </Choices>
+              )
             )
           )
         )

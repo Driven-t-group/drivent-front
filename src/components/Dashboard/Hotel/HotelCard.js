@@ -45,7 +45,7 @@ export default function HotelCard({ hotelImage, name, hotelId, selectedHotel, se
   return (
     <Card onClick={() => {
       setSelectedHotel(hotelId);
-      setSelectedRoom(null);
+      if (setSelectedRoom) setSelectedRoom(null);
     }} selected={selectedHotel === hotelId}>
       <img src={hotelImage} alt='imagem do hotel' />
       <h2>{name}</h2>
