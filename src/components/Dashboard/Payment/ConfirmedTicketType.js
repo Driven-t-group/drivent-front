@@ -5,13 +5,13 @@ import styled from 'styled-components';
 export default function ConfirmedTicketTyppe({ ticket }) {
   const [category, setCategory] = useState();
   useEffect(() => {
-    if (ticket.data.TicketType.isRemote) {
+    if (ticket?.data.TicketType.isRemote) {
       setCategory('Online');
     }
-    if (!ticket.data.TicketType.isRemote && ticket.data.TicketType.includesHotel) {
+    if (!ticket?.data.TicketType.isRemote && ticket?.data.TicketType.includesHotel) {
       setCategory('Presencial + Com hotel');
     }
-    if (!ticket.data.TicketType.isRemote && !ticket.data.TicketType.includesHotel) {
+    if (!ticket?.data.TicketType.isRemote && !ticket?.data.TicketType.includesHotel) {
       setCategory('Presencial + Sem Hotel');
     }
   }, []);
@@ -21,7 +21,7 @@ export default function ConfirmedTicketTyppe({ ticket }) {
       <p>Ingresso escolhido</p>
       <ContainerType>
         <p>{category}</p>
-        <p>R$ {ticket.data.TicketType.price}</p>
+        <p>R$ {ticket?.data.TicketType.price}</p>
       </ContainerType>
     </Container>
   );

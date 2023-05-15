@@ -7,9 +7,9 @@ export default function HotelType({ type, selectedType, setSelectedType, value }
   };
 
   return (
-    <TypeContainer selected={selectedType?.includesHotel === type.includesHotel} onClick={selectType}>
-      <p>{type.includesHotel ? 'Com Hotel' : 'Sem Hotel'}</p>
-      <p>+ R$ {!type.includesHotel ? '0': `${value}`}</p>
+    <TypeContainer selected={selectedType?.includesHotel === type?.includesHotel} onClick={selectType}>
+      <p>{type?.includesHotel ? 'Com Hotel' : 'Sem Hotel'}</p>
+      <p>+ R$ {!type?.includesHotel ? '0': `${value}`}</p>
     </TypeContainer>
   );
 };
