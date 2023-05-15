@@ -47,7 +47,7 @@ function CardContainer({ ticket }) {
         <ContainerContent>
           <p>Pagamento</p>
           <Content>
-            {ticket.data.status === 'RESERVED' && !paymentConfirm ? (
+            {ticket?.data.status === 'RESERVED' && !paymentConfirm ? (
               <>
                 <CardData>
                   <Cards
