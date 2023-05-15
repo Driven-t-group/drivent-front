@@ -1,4 +1,3 @@
-import useActivityByDate from '../../../hooks/api/useActivityByDate';
 import DateButton from '../../../components/Dashboard/Activity/DateButton';
 
 export default function ChooseDate(props) {

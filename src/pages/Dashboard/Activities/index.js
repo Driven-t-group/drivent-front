@@ -1,7 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import useToken from '../../../hooks/useToken';
+import { useState } from 'react';
 import ChooseDate from '../../../components/Dashboard/Activity/ChooseDate';
 import useActivityDate from '../../../hooks/api/useActivityDate';
 import LocationContainer from '../../../components/Dashboard/Activity/LocationContainer';

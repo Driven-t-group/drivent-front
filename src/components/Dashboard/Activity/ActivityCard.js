@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 import useSubscribeToActivity from '../../../hooks/api/useSubscribeToActivity';
 import enter_icon from '../../../assets/images/enter_icon.png';
 import check_icon from '../../../assets/images/check_icon.png';
@@ -17,8 +19,16 @@ export default function ActivityCard(props) {
   // }
 
   const {
+    activityError,
     postActivity
   } = useSubscribeToActivity(props.id);
+
+  function handleSubscribe() {
+    postActivity();
+    if (activityError) toast.error('Erro ao realizar inscrição!');
+    if (!activityError) toast.success('Inscrição realizada com sucesso!');
+    setTimeout(() => window.location.reload(), 700);
+  }
   
   const initTime = props.init.substring(11, 16);
   const endTime = props.end.substring(11, 16);
@@ -38,16 +48,16 @@ export default function ActivityCard(props) {
         <div Style='height: 100%; width: 2px; background: #CFCFCF;'/>
         {props.subscribed?
           <div Style='width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 12px;'>
-            <img src={check_icon} alt='enter' Style='cursor: pointer; height: 22px;'/>
+            <img src={check_icon} alt='enter' Style='height: 22px;'/>
             <div Style='color: green; font-size: 9px;'>Inscrito</div>
           </div> :
-          props.vacancies === 0 ?
+          props.vacancies === 0?
             <div Style='width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 12px;'>
-              <img src={close_icon} alt='enter' Style='cursor: pointer; height: 22px;'/>
+              <img src={close_icon} alt='enter' Style='height: 22px;'/>
               <div Style='color: red; font-size: 9px;'>Esgotado</div>
             </div> :
             <div Style='width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-left: 12px;'>
-              <img src={enter_icon} alt='enter' Style='cursor: pointer; height: 22px;' onClick={postActivity}/>
+              <img src={enter_icon} alt='enter' Style='cursor: pointer; height: 22px;' onClick={handleSubscribe}/>
               <div Style='color: green; font-size: 9px;'>{props.vacancies} vagas</div>
             </div>
         }
