@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import useSaveTicket from '../../../hooks/api/useSaveTicket';
 import { toast } from 'react-toastify';
 
-export default function ConfirmTicket({ selectedTicket }) {
+export default function ConfirmTicket({ selectedTicket, setCreated }) {
   const { createTicket } = useSaveTicket();
   async function handleTicket() {
     try {
       await createTicket(selectedTicket.id);
+      setCreated(true);
       toast('Ingresso reservado com sucesso.');
     } catch (error) {
       toast('Nõ foi possível reservar ingresso.');

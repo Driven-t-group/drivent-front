@@ -38,7 +38,7 @@ export default function Hotel() {
       <h1>Escolha de hotel e quarto</h1>
       {
         ticketLoadding | loaddingHotels | loadingBooking ? <div>loadding...</div> : (
-          ticket.data.status === 'RESERVED' ? <NoPaymentHotel /> : (
+          ticket?.data.status === 'RESERVED' | !ticket ? <NoPaymentHotel /> : (
             !ticket.data.TicketType.includesHotel ? <NoIncludesHotel /> : (
               booking ? <BookingUpdate booking={booking} reload={reload} setReload={setReload}/> : (
                 <Choices>

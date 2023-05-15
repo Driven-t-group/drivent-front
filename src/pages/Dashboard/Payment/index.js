@@ -5,27 +5,43 @@ import TypeContainer from '../../../components/Dashboard/Payment/TypeContainer';
 import { useState } from 'react';
 import HotelTypeContainer from '../../../components/Dashboard/Payment/HotelTypeContainer';
 import ConfirmTicket from '../../../components/Dashboard/Payment/ConfirmTicket';
+import useTicket from '../../../hooks/api/useTicket';
+import CardContainer from '../../../components/Dashboard/Payment/CardContainer';
+import { useEffect } from 'react';
 
 export default function Payment() {
   const enrollment = useEnrollment().enrollment;
   const ticketsTypes = useTicketsTypes().ticketsTypes;
   const [selectedType, setSelectedType] = useState();
+  const { ticket, getTicket, ticketLoadding } = useTicket();
+  const [created, setCreated] = useState(false);
+
+  useEffect(() => {
+    getTicket();
+    console.log(ticket);
+  }, [created]);
+
+  if(ticketLoadding) {
+    return '';
+  }
 
   return (
     <>
       <Header>Ingresso e Pagamento</Header>
-      
+
       {!enrollment ? (
         <FinishSubContainer>
           <FinishSubParagraph>Você precisa completar sua inscrição antes de prosseguir pra a escolha de ingresso</FinishSubParagraph>
         </FinishSubContainer>
       ) : (
-        <Container>
-          <Paragraph>Primeiro, escolha a sua modalidade de ingresso</Paragraph>
-          <TypeContainer ticketsTypes={ticketsTypes} selectedType={selectedType} setSelectedType={setSelectedType} />
-          {!selectedType?.isRemote && <HotelTypeContainer selectedType={selectedType} setSelectedType={setSelectedType} ticketsTypes={ticketsTypes}/> }
-          {selectedType && <ConfirmTicket selectedTicket={selectedType}/>}
-        </Container>
+        ticket | created ? <CardContainer ticket={ticket}/> : (
+          <Container>
+            <Paragraph>Primeiro, escolha a sua modalidade de ingresso</Paragraph>
+            <TypeContainer ticketsTypes={ticketsTypes} selectedType={selectedType} setSelectedType={setSelectedType} />
+            {!selectedType?.isRemote && <HotelTypeContainer selectedType={selectedType} setSelectedType={setSelectedType} ticketsTypes={ticketsTypes} />}
+            {selectedType && <ConfirmTicket selectedTicket={selectedType} setCreated={setCreated}/>}
+          </Container>
+        )
       )}
     </>
   );
