@@ -7,16 +7,16 @@ export default function useActivityDate() {
   const token = useToken();
 
   const {
-    data: activity,
-    loading: activitytLoading,
-    error: activityError,
-    act: getActivity
+    data: dates,
+    loading: datesLoading,
+    error: datesError,
+    act: getDates
   } = useAsync(() => activityApi.getDates(token));
 
   return {
-    activity,
-    activitytLoading,
-    activityError,
-    getActivity
+    dates,
+    datesLoading,
+    datesError,
+    getDates
   };
 };

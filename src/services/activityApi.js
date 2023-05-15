@@ -11,6 +11,7 @@ export async function getDates(token) {
 }
 
 export async function getByDate(token, date) {
+  console.log('getByDate', date);
   const response = await api.get('/activity/dates/' + date, {
     headers: {
       Authorization: `Bearer ${token}`,
