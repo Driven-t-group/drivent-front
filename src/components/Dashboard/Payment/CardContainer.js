@@ -1,65 +1,91 @@
 import React from 'react';
-import axios from 'axios';
-import card_icon from '../../../assets/images/enter_icon.png';
 import styled from 'styled-components';
 import { useState } from 'react';
+import useProcessPayment from '../../../hooks/api/useProcessPayment';
+import Cards from 'react-credit-cards';
+import { toast } from 'react-toastify';
+import ConfirmedTicketTyppe from './ConfirmedTicketType';
+import ConfirmedPayment from './ConfirmedPayment';
 
 function CardContainer({ ticket }) {
   const [cardNumber, setCardNumber] = useState('');
   const [name, setName] = useState('');
   const [validThru, setValidThru] = useState('');
   const [cvc, setCvc] = useState('');
-  const [paymentConfirm, setPaymentConfirm] = useState('');
-
-  function doPayment(e) {
+  const [paymentConfirm, setPaymentConfirm] = useState(false);
+  const { processPayment } = useProcessPayment();
+  async function doPayment(e) {
     e.preventDefault();
-    const url = process.env.REACT_APP_API_URL;
+
+    if (!cardNumber || !name || !cvc) {
+      toast('Informe todos os dados.');
+      return;
+    }
+  
     const cardData = {
-      cardNumber,
+      issuer: 'credit',
+      number: Number(cardNumber),
       name,
-      cvc,
+      cvv: cvc,
+      expirationDate: new Date().toISOString()
     };
-    axios
-      .post(`${url}/process`, { ticketId: ticket.id, cardData })
-      .then((response) => alert('Entrada realizada com sucesso'))
-      .catch((error) => alert(error.response.data));
-    setCardNumber('');
-    setPaymentConfirm('Pagamento realizado com sucesso');
+    try {
+      const newTicket = await processPayment(ticket.data.id, cardData);
+      console.log(newTicket);
+      setPaymentConfirm(true);
+    } catch (error) {
+      console.log(error.message);
+      toast('Não foi possível concluir o pagamento.');
+    }
   }
 
   return (
     <>
       <Header>Pagamento</Header>
-      {paymentConfirm ? (
-        <div>'Pagamento realizado com sucesso'</div>
-      ) : (
-        <Content>
-          (<img alt="card" src={card_icon} />
-          <form onSubmit={doPayment}>
-            <input
-              type="text"
-              value={cardNumber}
-              placeholder="Card Number"
-              onChange={(event) => setPaymentConfirm(event.target.value)}
-            ></input>
-            <input
-              type="text"
-              value={name}
-              placeholder="Name"
-              onChange={(event) => setName(event.target.value)}
-            ></input>
-            <input
-              type="date"
-              value={validThru}
-              placeholder="valid Thru"
-              onChange={(event) => setValidThru(event.target.value)}
-            ></input>
-            <input type="number" value={cvc} placeholder="cvc" onChange={(event) => setCvc(event.target.value)}></input>
-            <button type="submit">FINALIZAR PAGAMENTO</button>
-          </form>
-          )
-        </Content>
-      )}
+      <ContainerCard>
+        <ConfirmedTicketTyppe ticket={ticket} />
+        <ContainerContent>
+          <p>Pagamento</p>
+          <Content>
+            {ticket.data.status === 'RESERVED' && !paymentConfirm ? (
+              <>
+                <CardData>
+                  <Cards
+                    cvc={cvc}
+                    name={name}
+                    number={cardNumber}
+                    expiry={validThru}
+                  />
+                </CardData>
+                <form onSubmit={doPayment}>
+                  <input
+                    type="text"
+                    value={cardNumber}
+                    placeholder="Card Number"
+                    onChange={(event) => setCardNumber(event.target.value)}
+                  ></input>
+                  <input
+                    type="text"
+                    value={name}
+                    placeholder="Name"
+                    onChange={(event) => setName(event.target.value)}
+                  ></input>
+                  <Container>
+                    <input type="number" value={cvc} placeholder="cvc" onChange={(event) => setCvc(event.target.value)}></input>
+                    <input
+                      pattern='[1-9]{2}/[1-9]{4}'
+                      value={validThru}
+                      placeholder="01/2022"
+                      onChange={(event) => setValidThru(event.target.value)}
+                    ></input>
+                  </Container>
+                </form>
+              </>
+            ) : <ConfirmedPayment />}
+          </Content>
+        </ContainerContent>
+        {ticket.data.status === 'RESERVED' && !paymentConfirm ? <button onClick={doPayment}>FINALIZAR PAGAMENTO</button>: ''}
+      </ContainerCard>
     </>
   );
 }
@@ -73,8 +99,61 @@ const Header = styled.header`
 
 const Content = styled.div`
   height: 300px;
+  width: 706px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 20px;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    input {
+      height: 30px;
+      width: 100%;
+      border: 1px solid #cccccc;
+      border-radius: 6px;
+      padding-left: 10px;
+    }
+  }
+`;
+
+const Container = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ContainerCard = styled.div`
+  button{
+    background-color: #E0E0E0;
+    width: 182px;
+    height: 37px;
+    border-radius: 4px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+    border: none;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 14px;
+    font-family: 'Roboto';
+  }
+`;
+
+const CardData = styled.div`
+  width: 350px;
+  height: 200px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 12px;
+  background-color: #cdcdcd;
+`;
+
+const ContainerContent = styled.div`
+  width: 100%;
+  & > p{
+      font-family: 'Roboto';
+      font-size: 20px;
+      font-weight: 400;
+      color: #8E8E8E;
+    }
 `;

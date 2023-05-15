@@ -7,23 +7,13 @@ import HotelTypeContainer from '../../../components/Dashboard/Payment/HotelTypeC
 import ConfirmTicket from '../../../components/Dashboard/Payment/ConfirmTicket';
 import useTicket from '../../../hooks/api/useTicket';
 import CardContainer from '../../../components/Dashboard/Payment/CardContainer';
-import { useEffect } from 'react';
 
 export default function Payment() {
   const enrollment = useEnrollment().enrollment;
   const ticketsTypes = useTicketsTypes().ticketsTypes;
   const [selectedType, setSelectedType] = useState();
-  const { ticket, getTicket, ticketLoadding } = useTicket();
+  const { ticket, ticketLoadding } = useTicket();
   const [created, setCreated] = useState(false);
-
-  useEffect(() => {
-    getTicket();
-    console.log(ticket);
-  }, [created]);
-
-  if(ticketLoadding) {
-    return '';
-  }
 
   return (
     <>
@@ -33,15 +23,16 @@ export default function Payment() {
         <FinishSubContainer>
           <FinishSubParagraph>Você precisa completar sua inscrição antes de prosseguir pra a escolha de ingresso</FinishSubParagraph>
         </FinishSubContainer>
-      ) : (
-        ticket | created ? <CardContainer ticket={ticket}/> : (
+      ) : (ticketLoadding ? '...carregando' : (
+        ticket || created ? <CardContainer ticket={ticket} selectedTicket={selectedType} /> : (
           <Container>
             <Paragraph>Primeiro, escolha a sua modalidade de ingresso</Paragraph>
             <TypeContainer ticketsTypes={ticketsTypes} selectedType={selectedType} setSelectedType={setSelectedType} />
             {!selectedType?.isRemote && <HotelTypeContainer selectedType={selectedType} setSelectedType={setSelectedType} ticketsTypes={ticketsTypes} />}
-            {selectedType && <ConfirmTicket selectedTicket={selectedType} setCreated={setCreated}/>}
+            {selectedType && <ConfirmTicket selectedTicket={selectedType} setCreated={setCreated} />}
           </Container>
         )
+      )
       )}
     </>
   );

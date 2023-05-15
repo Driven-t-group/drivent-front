@@ -37,15 +37,15 @@ export default function Hotel() {
     <Container>
       <h1>Escolha de hotel e quarto</h1>
       {
-        ticketLoadding | loaddingHotels | loadingBooking ? <div>loadding...</div> : (
+        ticketLoadding || loaddingHotels || loadingBooking ? <div>loadding...</div> : (
           ticket?.data.status === 'RESERVED' | !ticket ? <NoPaymentHotel /> : (
-            !ticket.data.TicketType.includesHotel ? <NoIncludesHotel /> : (
+            !ticket.data?.TicketType.includesHotel ? <NoIncludesHotel /> : (
               booking ? <BookingUpdate booking={booking} reload={reload} setReload={setReload}/> : (
                 <Choices>
                   <p>Primeiro, escolha seu hotel</p>
                   <HotelContainer>
                     {
-                      hotels.data.map((h) => <HotelCard
+                      hotels?.data.map((h) => <HotelCard
                         hotelImage={h.image}
                         name={h.name}
                         hotelId={h.id}
