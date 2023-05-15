@@ -14,7 +14,7 @@ export default function ChooseDate(props) {
         {props.chosenDate? <div></div> : <a Style='font-size: 20px; color: #8E8E8E;'>Primeiro, filtre pelo dia do evento</a>}
         <div Style='display: flex; margin-top: 23px;'>
           {props.dates.map((date, i) => (
-            <DateButton selected={props.chosenDate===date} onClick={() => props.getActivity(date)} key={i}> {date} </DateButton>
+            <DateButton selected={props.chosenDate===date} onClick={() => props.handleChooseDate(date)} key={i}> {date} </DateButton>
           ))}
         </div>
       </div>
