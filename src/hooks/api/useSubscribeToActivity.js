@@ -11,7 +11,7 @@ export default function useActivityDate(activityId) {
     loading: activitytLoading,
     error: activityError,
     act: postActivity
-  } = useAsync(() => activityApi.subscribe(token, activityId));
+  } = useAsync(() => activityApi.subscribe(token, activityId), false);
 
   return {
     activity,
