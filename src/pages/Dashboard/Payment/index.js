@@ -29,6 +29,7 @@ export default function Payment() {
             <Paragraph>Primeiro, escolha a sua modalidade de ingresso</Paragraph>
             <TypeContainer ticketsTypes={ticketsTypes} selectedType={selectedType} setSelectedType={setSelectedType} />
             {selectedType?.isRemote || !selectedType ? '' : <HotelTypeContainer selectedType={selectedType} setSelectedType={setSelectedType} ticketsTypes={ticketsTypes} />}
+
             {selectedType && <ConfirmTicket selectedTicket={selectedType} setCreated={setCreated} />}
           </Container>
         )

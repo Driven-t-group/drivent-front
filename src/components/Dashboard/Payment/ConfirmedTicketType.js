@@ -22,6 +22,7 @@ export default function ConfirmedTicketTyppe({ ticket }) {
       <ContainerType>
         <p>{category}</p>
         <p>R$ {ticket?.data.TicketType.price}</p>
+
       </ContainerType>
     </Container>
   );

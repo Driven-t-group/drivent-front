@@ -11,7 +11,7 @@ export default function useActivityByDate(date) {
     loading: activitytLoading,
     error: activityError,
     act: getActivity
-  } = useAsync(() => activityApi.getByDate(token, date));
+  } = useAsync((date) => activityApi.getByDate(token, date), false);
 
   return {
     activity,

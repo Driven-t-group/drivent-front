@@ -89,6 +89,7 @@ function CardContainer({ ticket }) {
           </Content>
         </ContainerContent>
         {ticket?.data.status === 'RESERVED' && !paymentConfirm ? <button onClick={doPayment}>FINALIZAR PAGAMENTO</button>: ''}
+
       </ContainerCard>
     </>
   );
