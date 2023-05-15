@@ -6,6 +6,14 @@ export async function getTicketsByTypes(token) {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
+}
 
+export async function postPaymentProcess(token) {
+  const response = await api.get('/tickets/process', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 }

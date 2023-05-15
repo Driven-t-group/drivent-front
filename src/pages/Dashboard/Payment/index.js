@@ -8,8 +8,7 @@ export default function Payment() {
 
   return (
     <>
-      <Header>Ingresso e Pagamento</Header>
-      
+      <Header>Ingresso e Pagamento</Header>      
       {enrollment === '' ? (
         <FinishSubContainer>
           <FinishSubParagraph>Você precisa completar sua inscrição antes de prosseguir pra a escolha de ingresso</FinishSubParagraph>
@@ -28,7 +27,7 @@ export default function Payment() {
             })}
           </ChoiceContainer>
         </Container>
-      )}
+      )}     
     </>
   );
 }
