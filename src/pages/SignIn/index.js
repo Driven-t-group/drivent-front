@@ -14,6 +14,8 @@ import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
 
+import ThirdPartyAuth from '../../components/Auth/ThirdPartyAuth';
+
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,6 +57,7 @@ export default function SignIn() {
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
       </Row>
+      <ThirdPartyAuth/>
     </AuthLayout>
   );
 }
