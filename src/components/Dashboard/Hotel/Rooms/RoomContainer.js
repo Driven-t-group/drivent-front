@@ -28,6 +28,7 @@ export default function RoomsContainer({ selectedHotel, selectedRoom, setSelecte
   async function submitBooking() {
     try {
       await createBooking({ roomId: selectedRoom }); 
+      toast('Reserva realizada com sucesso.');
     } catch (error) {
       toast('Não é possível reservar este quarto.');
     }

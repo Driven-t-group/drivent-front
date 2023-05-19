@@ -13,8 +13,9 @@ export default function RoomCard({ name, capacity, bookings, selectedRoom, setSe
     let newPerson = [];
     if (capacity === bookings.length) {
       for (let i = 0; i < capacity; i++) {
-        if (selectedRoom === id && i === capacity-1) {
+        if (selectedRoom === id && i === capacity - 1) {
           newPerson.push(<BsPersonFill key={i} style={{ color: '#FF4791' }} />);
+          if (capacity === 1) break;
         }
         newPerson.push(<BsPersonFill key={i} />);
       };
@@ -23,18 +24,18 @@ export default function RoomCard({ name, capacity, bookings, selectedRoom, setSe
     };
     for (let i = 0; i < capacity; i++) {
       if (bookings.length > i) {
-        if(bookings[i].id === booking?.id && i === bookings.length-1) {
+        if (bookings[i].id === booking?.id && i === bookings.length - 1) {
           newPerson.push(<BsPersonFill key={i} style={{ color: 'FF4791' }} />);
           continue;
         }
         newPerson.push(<BsPersonFill key={i} />);
         continue;
       }
-      if(booking) {
+      if (booking) {
         newPerson.push(<BsPerson key={i} />);
         continue;
       }
-      if (selectedRoom === id && bookings.length === i ) {
+      if (selectedRoom === id && bookings.length === i) {
         newPerson.push(<BsPersonFill key={i} style={{ color: 'FF4791' }} />);
         continue;
       }
