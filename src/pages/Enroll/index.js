@@ -13,6 +13,8 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 
 import useSignUp from '../../hooks/api/useSignUp';
 
+import ThirdPartyAuth from '../../components/Auth/ThirdPartyAuth';
+
 export default function Enroll() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,8 +58,9 @@ export default function Enroll() {
         </form>
       </Row>
       <Row>
-        <Link to="/sign-in">Já está inscrito? Faça login</Link>
+        <Link Style="margin: 15px;" to="/sign-in">Já está inscrito? Faça login</Link>
       </Row>
+      <ThirdPartyAuth/>
     </AuthLayout>
   );
 }
