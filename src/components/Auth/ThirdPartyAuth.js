@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export default function ThirdPartyAuth(props) {
   const githubRedirect = () => {
+    console.log(process.env.CLIENT_ID);
     window.location.href = 'https://github.com/login/oauth/authorize?client_id=dea6dd764b82f1c2c545'; //use process.env.CLIENT_ID
   };
 
