@@ -11,6 +11,7 @@ import useTicket from '../../../hooks/api/useTicket';
 function CardContainer() {
   const { ticket, ticketLoadding } = useTicket();
   const [cardNumber, setCardNumber] = useState('');
+  const [paymentConfirm, setPaymentConfirm] = useState(false);
   const [name, setName] = useState('');
   const [validThru, setValidThru] = useState('');
   const [cvc, setCvc] = useState('');
@@ -31,6 +32,16 @@ function CardContainer() {
       cvv: cvc,
       expirationDate: new Date().toISOString()
     };
+
+    try {
+      const newTicket = await processPayment(ticket.data.id, cardData);
+      console.log(newTicket);
+      setPaymentConfirm(true);
+    } catch (error) {
+      console.log(error.message);
+      toast('Não foi possível concluir o pagamento.');
+    }
+
   }
 
   if(ticketLoadding) {
@@ -45,7 +56,7 @@ function CardContainer() {
         <ContainerContent>
           <p>Pagamento</p>
           <Content>
-            {ticket.data.status === 'RESERVED' ? (
+            {ticket.data.status === 'RESERVED' && !paymentConfirm ? (
               <>
                 <CardData>
                   <Cards
@@ -82,8 +93,7 @@ function CardContainer() {
             ) : <ConfirmedPayment />}
           </Content>
         </ContainerContent>
-        {ticket.data.status === 'RESERVED' ? <button onClick={doPayment}>FINALIZAR PAGAMENTO</button>: ''}
-
+        {ticket.data.status === 'RESERVED' && !paymentConfirm ? <button onClick={doPayment}>FINALIZAR PAGAMENTO</button>: ''}
       </ContainerCard>
     </>
   );
