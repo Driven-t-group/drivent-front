@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import useProcessPayment from '../../../hooks/api/useProcessPayment';
@@ -6,14 +6,16 @@ import Cards from 'react-credit-cards';
 import { toast } from 'react-toastify';
 import ConfirmedTicketTyppe from './ConfirmedTicketType';
 import ConfirmedPayment from './ConfirmedPayment';
+import useTicket from '../../../hooks/api/useTicket';
 
-function CardContainer({ ticket }) {
+function CardContainer() {
+  const { ticket, ticketLoadding } = useTicket();
   const [cardNumber, setCardNumber] = useState('');
   const [name, setName] = useState('');
   const [validThru, setValidThru] = useState('');
   const [cvc, setCvc] = useState('');
-  const [paymentConfirm, setPaymentConfirm] = useState(false);
   const { processPayment } = useProcessPayment();
+
   async function doPayment(e) {
     e.preventDefault();
 
@@ -29,18 +31,10 @@ function CardContainer({ ticket }) {
       cvv: cvc,
       expirationDate: new Date().toISOString()
     };
-    try {
-      const newTicket = await processPayment(ticket.data.id, cardData);
-      console.log(newTicket);
-      setPaymentConfirm(true);
-    } catch (error) {
-      console.log(error.message);
-      toast('Não foi possível concluir o pagamento.');
-    }
   }
 
-  if(!ticket) {
-    return <div>..loading</div>;
+  if(ticketLoadding) {
+    return <div>...loading</div>;
   }
 
   return (
@@ -51,7 +45,7 @@ function CardContainer({ ticket }) {
         <ContainerContent>
           <p>Pagamento</p>
           <Content>
-            {ticket?.data.status === 'RESERVED' && !paymentConfirm ? (
+            {ticket.data.status === 'RESERVED' ? (
               <>
                 <CardData>
                   <Cards
@@ -88,7 +82,7 @@ function CardContainer({ ticket }) {
             ) : <ConfirmedPayment />}
           </Content>
         </ContainerContent>
-        {ticket?.data.status === 'RESERVED' && !paymentConfirm ? <button onClick={doPayment}>FINALIZAR PAGAMENTO</button>: ''}
+        {ticket.data.status === 'RESERVED' ? <button onClick={doPayment}>FINALIZAR PAGAMENTO</button>: ''}
 
       </ContainerCard>
     </>
