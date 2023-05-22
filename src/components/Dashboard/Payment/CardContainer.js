@@ -11,10 +11,10 @@ import useTicket from '../../../hooks/api/useTicket';
 function CardContainer() {
   const { ticket, ticketLoadding } = useTicket();
   const [cardNumber, setCardNumber] = useState('');
+  const [paymentConfirm, setPaymentConfirm] = useState(false);
   const [name, setName] = useState('');
   const [validThru, setValidThru] = useState('');
   const [cvc, setCvc] = useState('');
-  const [paymentConfirm, setPaymentConfirm] = useState(false);
   const { processPayment } = useProcessPayment();
 
   async function doPayment(e) {
@@ -41,6 +41,7 @@ function CardContainer() {
       console.log(error.message);
       toast('Não foi possível concluir o pagamento.');
     }
+
   }
 
   if(ticketLoadding) {
